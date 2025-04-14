@@ -75,14 +75,14 @@ interface Tunnel0
  ipv6 nhrp network-id 1
  ipv6 nhrp nhs 2001:11:14:1::1 nbma 151.14.1.1 multicast
  ipv6 nhrp shortcut
- tunnel source FastEthernet0/0
+ tunnel source GigabitEthernet0/0/0
  tunnel mode gre multipoint
 !
-interface FastEthernet0/0
+interface GigabitEthernet0/0/0
  ip address dhcp
  duplex full
 !
-interface GigabitEthernet1/0
+interface GigabitEthernet0/0/1
  no ip address
  shutdown
  negotiation auto
