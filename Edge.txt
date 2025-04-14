@@ -1,6 +1,7 @@
 !
-upgrade fpd auto
-version 15.5
+! Last configuration change at 20:11:34 UTC Mon Apr 14 2025
+!
+version 15.7
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
@@ -13,7 +14,7 @@ boot-end-marker
 !
 !
 no aaa new-model
-bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+!
 !
 !
 !
@@ -22,6 +23,16 @@ bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
 no ip icmp rate-limit unreachable
 !
 !
+!
+!
+!
+!
+!
+!
+!
+!
+
+
 !
 !
 !
@@ -36,17 +47,19 @@ multilink bundle-name authenticated
 !
 !
 !
-!
-!
+license udi pid CISCO2901/K9 sn FGL181621EH
+license boot suite FoundationSuiteK9
 !
 !
 !
 redundancy
-!         
+!
+!
+!
+!
 no cdp log mismatch duplex
 !
 ip tcp synwait-time 5
-! 
 !
 !
 !
@@ -57,48 +70,51 @@ ip tcp synwait-time 5
 !
 !
 !
-interface Ethernet0/0
+interface Embedded-Service-Engine0/0
  no ip address
  shutdown
- duplex auto
 !
 interface GigabitEthernet0/0
- ip address 151.14.255.254 255.255.255.0
- duplex full
- speed 1000
- media-type gbic
- negotiation auto
-!
-interface GigabitEthernet1/0
  ip address dhcp
- negotiation auto
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 151.14.255.254 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ shutdown
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
 !
 ip forward-protocol nd
+!
 no ip http server
 no ip http secure-server
 !
+ip nat inside source list 10 interface GigabitEthernet0/0 overload
+ip route 151.14.0.0 255.255.0.0 GigabitEthernet0/1
 !
-ip route 151.14.0.0 255.255.0.0 GigabitEthernet0/0
+ipv6 ioam timestamp
 !
 !
-!
+access-list 10 permit 151.14.0.0 0.0.255.255
 !
 control-plane
 !
 !
-mgcp behavior rsip-range tgcp-only
-mgcp behavior comedia-role none
-mgcp behavior comedia-check-media-src disable
-mgcp behavior comedia-sdp-force disable
-!
-mgcp profile default
-!
-!
-!
-!
-gatekeeper
- shutdown
-!
+ vstack
 !
 line con 0
  exec-timeout 0 0
@@ -110,10 +126,18 @@ line aux 0
  privilege level 15
  logging synchronous
  stopbits 1
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output lat pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
 line vty 0 4
- login    
+ password Cisco123
+ login
  transport input none
 !
+scheduler allocate 20000 1000
 !
 end
 
