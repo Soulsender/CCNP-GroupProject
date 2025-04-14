@@ -14,6 +14,7 @@ boot-end-marker
 !
 !
 no aaa new-model
+ipv6 unicast-routing
 !
 !
 !
