@@ -1,5 +1,5 @@
 !
-! Last configuration change at 20:24:51 UTC Mon Apr 14 2025
+! Last configuration change at 21:42:53 UTC Mon Apr 14 2025
 !
 version 17.12
 service timestamps debug datetime msec
@@ -21,7 +21,6 @@ vrf definition Mgmt-intf
  address-family ipv6
  exit-address-family
 !
-ipv6 unicast-routing
 ! card type command needed for slot/bay 0/2
 no aaa new-model
 no ip icmp rate-limit unreachable
@@ -42,6 +41,7 @@ login on-success log
 !
 !
 !
+ipv6 unicast-routing
 !
 !
 subscriber templating
@@ -153,6 +153,8 @@ interface Tunnel0
  ip nhrp network-id 1
  ip nhrp redirect
  ip tcp adjust-mss 1360
+ ip ospf network broadcast
+ ip ospf priority 255
  ipv6 address 2001:11:14:1::1/64
  ipv6 mtu 1400
  ipv6 tcp adjust-mss 1360
@@ -201,6 +203,10 @@ interface GigabitEthernet0
 !
 interface Vlan1
  no ip address
+!
+router ospf 14
+ network 11.14.1.0 0.0.0.255 area 0
+ network 172.14.0.0 0.0.0.255 area 0
 !
 ip forward-protocol nd
 ip tcp synwait-time 5
