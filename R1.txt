@@ -1,5 +1,5 @@
 !
-! Last configuration change at 19:56:47 UTC Mon Apr 14 2025
+! Last configuration change at 20:24:51 UTC Mon Apr 14 2025
 !
 version 17.12
 service timestamps debug datetime msec
@@ -166,8 +166,12 @@ interface GigabitEthernet0/0/0
  negotiation auto
 !
 interface GigabitEthernet0/0/1
- ip address 172.14.0.1 255.255.255.0
+ no ip address
  negotiation auto
+!
+interface GigabitEthernet0/0/1.10
+ encapsulation dot1Q 10
+ ip address 172.14.0.1 255.255.255.0
 !
 interface GigabitEthernet0/1/0
 !
