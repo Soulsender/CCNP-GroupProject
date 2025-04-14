@@ -1,56 +1,142 @@
-! R1
-upgrade fpd auto
-version 15.5
+!
+! Last configuration change at 19:56:47 UTC Mon Apr 14 2025
+!
+version 17.12
 service timestamps debug datetime msec
 service timestamps log datetime msec
-no service password-encryption
+platform qfp utilization monitor load 80
+platform punt-keepalive disable-kernel-core
 !
-hostname R1
+hostname R1-14
 !
 boot-start-marker
 boot-end-marker
 !
 !
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
 !
+! card type command needed for slot/bay 0/2
 no aaa new-model
-bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
-!
-!
-!
-! 
-!
 no ip icmp rate-limit unreachable
 !
-!
-!
-!
-!
-!
 no ip domain lookup
-ip cef
-no ipv6 cef
 !
+!
+!
+!
+!
+!
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+vtp version 1
 multilink bundle-name authenticated
 !
 !
 !
+crypto pki trustpoint TP-self-signed-1940664125
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1940664125
+ revocation-check none
+ rsakeypair TP-self-signed-1940664125
+ hash sha256
+!
+crypto pki trustpoint SLA-TrustPoint
+ enrollment pkcs12
+ revocation-check crl
+ hash sha256
 !
 !
+crypto pki certificate chain TP-self-signed-1940664125
+ certificate self-signed 01
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030
+  31312F30 2D060355 04030C26 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 31393430 36363431 3235301E 170D3235 30343134 31383438
+  35315A17 0D333530 34313431 38343835 315A3031 312F302D 06035504 030C2649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 39343036
+  36343132 35308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201
+  0A028201 0100C093 E51D55C7 B65FD177 554D5A97 3714A44A 6EC27628 E9E1EF81
+  46BF92C4 B2B4BDF1 4357294F A6F45866 A8E1FDB3 70CADCAD 5D7E44DC 7535E0B0
+  B39ECEA9 A61C0F18 FBFDB2DC 11D913CB EA27749B 46363ADD 33BA6AC4 247BC5FD
+  0DA8952B 765E1951 5BADF97C F528F3FE 069F4C55 4BF20647 F483F8BE 4EB96817
+  2EE43F17 D1B26CE1 5111D838 017829D2 3466B8FB EB68AB77 554B0EEF F3DBD3FC
+  7866F25D A95F6E22 F78ACD06 4870AB4E 732EF15C BF61D35C 874ACD2F 8984965C
+  D831736B 02D0C19C 7677F68C A3F8613E F1B4C505 885C6A88 BC61F050 5DCE2A6C
+  E49C5EDF 876585E1 7B706A32 9682589E 53C8F2A0 C9B5CA51 A31F30EB 62B8C8BF
+  0AC64CD6 54350203 010001A3 53305130 1D060355 1D0E0416 04146E48 EE49F96E
+  092A33EA 9879CF42 FC55EA03 49BB301F 0603551D 23041830 1680146E 48EE49F9
+  6E092A33 EA9879CF 42FC55EA 0349BB30 0F060355 1D130101 FF040530 030101FF
+  300D0609 2A864886 F70D0101 0B050003 82010100 9B84BF80 E85F90E6 990218FF
+  88F3011D 41805522 E25618A2 93743365 5AEFD3BC 565A8C19 660C815E C382C623
+  98BAE6CB 0473F813 981A5216 4A90D0D5 A9720672 9884FF06 E8EA1221 2110939B
+  3C576B50 B54E589E 92DB0506 3BFE369F 1B71192C 6B880459 65577078 7C29BD06
+  4ACAFB90 402CA065 83325DAB 5BA9B513 7B0A9C2E 026A0F6B 1A4322C2 FA1AA2F0
+  BA2BFBF3 EB39AD0F 1DBB9543 529B8A7F 8117187D EE7073F2 34EEDED8 02D261A1
+  971C54FB 18309C3F 8FB39472 271A6E51 AB26E1FC 9077C035 7121ACF1 D50EB06A
+  78D6F0F1 BB2B0998 D92AC4F6 93358A71 0B0EDF4A 31650542 2A09CD3A C04F4FD5
+  ABE463ED C307FCB2 B28AD35C 42B62454 CAFB85CD
+        quit
+crypto pki certificate chain SLA-TrustPoint
+ certificate ca 01
+  30820321 30820209 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030
+  32310E30 0C060355 040A1305 43697363 6F312030 1E060355 04031317 43697363
+  6F204C69 63656E73 696E6720 526F6F74 20434130 1E170D31 33303533 30313934
+  3834375A 170D3338 30353330 31393438 34375A30 32310E30 0C060355 040A1305
+  43697363 6F312030 1E060355 04031317 43697363 6F204C69 63656E73 696E6720
+  526F6F74 20434130 82012230 0D06092A 864886F7 0D010101 05000382 010F0030
+  82010A02 82010100 A6BCBD96 131E05F7 145EA72C 2CD686E6 17222EA1 F1EFF64D
+  CBB4C798 212AA147 C655D8D7 9471380D 8711441E 1AAF071A 9CAE6388 8A38E520
+  1C394D78 462EF239 C659F715 B98C0A59 5BBB5CBD 0CFEBEA3 700A8BF7 D8F256EE
+  4AA4E80D DB6FD1C9 60B1FD18 FFC69C96 6FA68957 A2617DE7 104FDC5F EA2956AC
+  7390A3EB 2B5436AD C847A2C5 DAB553EB 69A9A535 58E9F3E3 C0BD23CF 58BD7188
+  68E69491 20F320E7 948E71D7 AE3BCC84 F10684C7 4BC8E00F 539BA42B 42C68BB7
+  C7479096 B4CB2D62 EA2F505D C7B062A4 6811D95B E8250FC4 5D5D5FB8 8F27D191
+  C55F0D76 61F9A4CD 3D992327 A8BB03BD 4E6D7069 7CBADF8B DF5F4368 95135E44
+  DFC7C6CF 04DD7FD1 02030100 01A34230 40300E06 03551D0F 0101FF04 04030201
+  06300F06 03551D13 0101FF04 05300301 01FF301D 0603551D 0E041604 1449DC85
+  4B3D31E5 1B3E6A17 606AF333 3D3B4C73 E8300D06 092A8648 86F70D01 010B0500
+  03820101 00507F24 D3932A66 86025D9F E838AE5C 6D4DF6B0 49631C78 240DA905
+  604EDCDE FF4FED2B 77FC460E CD636FDB DD44681E 3A5673AB 9093D3B1 6C9E3D8B
+  D98987BF E40CBD9E 1AECA0C2 2189BB5C 8FA85686 CD98B646 5575B146 8DFC66A8
+  467A3DF4 4D565700 6ADF0F0D CF835015 3C04FF7C 21E878AC 11BA9CD2 55A9232C
+  7CA7B7E6 C1AF74F6 152E99B7 B1FCF9BB E973DE7F 5BDDEB86 C71E3B49 1765308B
+  5FB0DA06 B92AFE7F 494E8A9E 07B85737 F3A58BE1 1A48A229 C37C1E69 39F08678
+  80DDCD16 D6BACECA EEBC7CF9 8428787B 35202CDC 60E4616A B623CDBD 230E3AFB
+  418616A9 4093E049 4D10AB75 27E86F73 932E35B5 8862FDAE 0275156F 719BB2F0
+  D697DF7F 28
+        quit
 !
 !
+diagnostic bootup level minimal
+!
+license udi pid ISR4321/K9 sn FDO200504XD
+memory free low-watermark processor 61453
+!
+spanning-tree extend system-id
 !
 !
 !
 redundancy
-!         
+ mode none
+!
+!
+vlan internal allocation policy ascending
 no cdp log mismatch duplex
-!
-ip tcp synwait-time 5
-! 
-!
-!
-!
-!
 !
 !
 !
@@ -63,7 +149,6 @@ interface Tunnel0
  no ip redirects
  ip mtu 1400
  ip nhrp authentication Cisco123
- ip nhrp map multicast dynamic
  ip nhrp network-id 1
  ip nhrp redirect
  ip tcp adjust-mss 1360
@@ -71,28 +156,57 @@ interface Tunnel0
  ipv6 mtu 1400
  ipv6 tcp adjust-mss 1360
  ipv6 nhrp authentication Cisco123
- ipv6 nhrp map multicast dynamic
  ipv6 nhrp network-id 1
  ipv6 nhrp redirect
  tunnel source GigabitEthernet0/0/0
  tunnel mode gre multipoint
 !
 interface GigabitEthernet0/0/0
- ! Service provider interface
  ip address 151.14.1.1 255.255.255.0
- duplex full
+ negotiation auto
 !
 interface GigabitEthernet0/0/1
- ! LAN interface
  ip address 172.14.0.1 255.255.255.0
  negotiation auto
 !
+interface GigabitEthernet0/1/0
+!
+interface GigabitEthernet0/1/1
+!
+interface GigabitEthernet0/1/2
+!
+interface GigabitEthernet0/1/3
+!
+interface GigabitEthernet0/1/4
+!
+interface GigabitEthernet0/1/5
+!
+interface GigabitEthernet0/1/6
+!
+interface GigabitEthernet0/1/7
+!
+interface Service-Engine0/2/0
+ no ip address
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface Vlan1
+ no ip address
+!
 ip forward-protocol nd
+ip tcp synwait-time 5
+ip tftp source-interface GigabitEthernet0
 no ip http server
+ip http authentication local
 no ip http secure-server
-!         
 !
 ip route 0.0.0.0 0.0.0.0 151.14.1.254
+ip ssh bulk-mode 131072
+!
 !
 !
 !
@@ -100,20 +214,6 @@ ip route 0.0.0.0 0.0.0.0 151.14.1.254
 control-plane
 !
 !
-mgcp behavior rsip-range tgcp-only
-mgcp behavior comedia-role none
-mgcp behavior comedia-check-media-src disable
-mgcp behavior comedia-sdp-force disable
-!
-mgcp profile default
-!
-!
-!
-!
-gatekeeper
- shutdown
-!
-!         
 line con 0
  exec-timeout 0 0
  privilege level 15
@@ -123,10 +223,17 @@ line aux 0
  exec-timeout 0 0
  privilege level 15
  logging synchronous
- stopbits 1
 line vty 0 4
  login
  transport input none
+line vty 5 14
+ login
+ transport input ssh
+!
+!
+!
+!
+!
 !
 !
 end
