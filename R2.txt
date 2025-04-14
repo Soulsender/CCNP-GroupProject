@@ -23,6 +23,7 @@ vrf definition Mgmt-intf
  address-family ipv6
  exit-address-family
 !
+ipv6 unicast-routing
 ! card type command needed for slot/bay 0/2
 no aaa new-model
 no ip icmp rate-limit unreachable
