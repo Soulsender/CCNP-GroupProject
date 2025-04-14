@@ -1,34 +1,55 @@
-! R3
-upgrade fpd auto
-version 15.5
+!
+! Last configuration change at 20:51:30 UTC Mon Apr 14 2025
+!
+version 17.12
 service timestamps debug datetime msec
 service timestamps log datetime msec
-no service password-encryption
+platform qfp utilization monitor load 80
+platform punt-keepalive disable-kernel-core
 !
-hostname R3
+hostname R3-14
 !
 boot-start-marker
 boot-end-marker
 !
 !
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
 !
+! card type command needed for slot/bay 0/2
 no aaa new-model
-bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
-!
-!
-!
-!
-!
 no ip icmp rate-limit unreachable
 !
-!
-!
-!
-!
-!
 no ip domain lookup
-ip cef
-no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+!
+!
+!
+vtp version 1
 !
 multilink bundle-name authenticated
 !
@@ -38,15 +59,35 @@ multilink bundle-name authenticated
 !
 !
 !
+diagnostic bootup level minimal
+!
+no license feature hseck9
+license udi pid ISR4321/K9 sn FDO20050521
+memory free low-watermark processor 61453
+!
+spanning-tree extend system-id
 !
 !
 !
 redundancy
-!         
+ mode none
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
 no cdp log mismatch duplex
 !
-ip tcp synwait-time 5
-! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
 !
 !
 !
@@ -65,8 +106,6 @@ interface Tunnel0
  ip nhrp authentication Cisco123
  ip nhrp network-id 1
  ip nhrp nhs 11.14.1.1 nbma 151.14.1.1 multicast
- ip nhrp registration no-unique
- ip nhrp shortcut
  ip tcp adjust-mss 1360
  ipv6 address 2001:11:14:1::3/64
  ipv6 mtu 1400
@@ -74,22 +113,42 @@ interface Tunnel0
  ipv6 nhrp authentication Cisco123
  ipv6 nhrp network-id 1
  ipv6 nhrp nhs 2001:11:14:1::1 nbma 151.14.1.1 multicast
- ipv6 nhrp shortcut
  tunnel source GigabitEthernet0/0/0
  tunnel mode gre multipoint
 !
 interface GigabitEthernet0/0/0
  ip address dhcp
- duplex full
+ negotiation auto
 !
 interface GigabitEthernet0/0/1
  no ip address
  shutdown
  negotiation auto
 !
+interface GigabitEthernet0/1/0
+!
+interface GigabitEthernet0/1/1
+!
+interface GigabitEthernet0/1/2
+!
+interface GigabitEthernet0/1/3
+!
+interface Service-Engine0/2/0
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ no ip address
+ negotiation auto
+!
+interface Vlan1
+ no ip address
+!
 ip forward-protocol nd
+ip tcp synwait-time 5
 no ip http server
 no ip http secure-server
+!
+ip ssh bulk-mode 131072
 !
 !
 !
@@ -98,20 +157,6 @@ no ip http secure-server
 !
 control-plane
 !
-!
-mgcp behavior rsip-range tgcp-only
-mgcp behavior comedia-role none
-mgcp behavior comedia-check-media-src disable
-mgcp behavior comedia-sdp-force disable
-!
-mgcp profile default
-!
-!
-!
-!
-gatekeeper
- shutdown
-!         
 !
 line con 0
  exec-timeout 0 0
@@ -122,10 +167,17 @@ line aux 0
  exec-timeout 0 0
  privilege level 15
  logging synchronous
- stopbits 1
 line vty 0 4
  login
  transport input none
+line vty 5 14
+ login
+ transport input ssh
+!
+!
+!
+!
+!
 !
 !
 end
