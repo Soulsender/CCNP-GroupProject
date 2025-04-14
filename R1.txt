@@ -17,7 +17,7 @@ bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
 !
 !
 !
-!
+! 
 !
 no ip icmp rate-limit unreachable
 !
@@ -74,14 +74,16 @@ interface Tunnel0
  ipv6 nhrp map multicast dynamic
  ipv6 nhrp network-id 1
  ipv6 nhrp redirect
- tunnel source FastEthernet0/0
+ tunnel source GigabitEthernet0/0/0
  tunnel mode gre multipoint
 !
-interface FastEthernet0/0
+interface GigabitEthernet0/0/0
+ ! Service provider interface
  ip address 151.14.1.1 255.255.255.0
  duplex full
 !
-interface GigabitEthernet1/0
+interface GigabitEthernet0/0/1
+ ! LAN interface
  ip address 172.14.0.1 255.255.255.0
  negotiation auto
 !
